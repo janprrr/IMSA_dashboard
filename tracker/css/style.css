@@ -1,0 +1,265 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, sans-serif;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    padding: 2rem;
+}
+
+header {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #e7e7e7;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+
+h1 {
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+.subtitle {
+    color: #666;
+    margin-top: 4px;
+}
+
+
+main {
+    display: flex;
+    gap: 10rem;
+    /* separació entre columnes */
+}
+
+.col-main {
+    flex: 3;
+}
+
+.col-track {
+    flex: 2;
+}
+
+h2 {
+    margin-bottom: 1rem;
+}
+
+#status {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.car-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.car-number {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #185FA5;
+    min-width: 40px;
+}
+
+.car-info {
+    flex: 1;
+}
+
+.car-team {
+    font-weight: 500;
+}
+
+.car-class {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 2px;
+}
+
+.car-laptime {
+    font-family: monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+
+/* filtre classe */
+#filtres {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.filtre {
+    padding: 6px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.filtre.actiu {
+    background: #185FA5;
+    color: white;
+    border-color: #185FA5;
+}
+
+.car-card.GTP {
+    border-left: 4px solid #185FA5;
+}
+
+.car-card.LMP2 {
+    border-left: 4px solid #287e28;
+}
+
+.car-card.GTDPRO {
+    border-left: 4px solid #A32D2D;
+}
+
+.car-card.GTD {
+    border-left: 4px solid #BA7517;
+}
+
+.badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
+.badge.GTP {
+    background: #E6F1FB;
+    color: #0C447C;
+}
+
+.badge.LMP2 {
+    background: #8bc97d;
+    color: #27551b;
+}
+
+.badge.GTDPRO {
+    background: #FCEBEB;
+    color: #A32D2D;
+}
+
+.badge.GTD {
+    background: #FAEEDA;
+    color: #633806;
+}
+
+
+
+/* chart */
+
+#grafic-container {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+#grafic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#grafic-titol {
+    font-weight: 600;
+}
+
+#grafic-tancar {
+    padding: 6px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    background: rgb(255, 90, 90);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600
+}
+
+
+/* info circuit */
+
+.track-info {
+    background: #f7f9fc;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 14px;
+    color: #2f3a48;
+    margin-bottom: 16px;
+
+}
+
+.track-info ul {
+    padding-left: 18px;
+    margin: 12px 0;
+}
+
+.track-info li {
+    margin-bottom: 6px;
+}
+
+.track-note {
+    margin-top: 12px;
+    color: #5f6b7a;
+    line-height: 1.5;
+}
+
+/* Targetes laterals (Race stats, Classes, etc.) */
+.side-card {
+    background: #f7f9fc;
+    border: 1px solid #e5e9f0;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: #2f3a48;
+}
+
+/* Títol de cada targeta */
+.side-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0b1c2d;
+}
+
+/* Llistes dins les targetes */
+.side-card ul {
+    margin: 0;
+    padding-left: 18px;
+    margin-bottom: 1rem;
+}
+
+.side-card li {
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+/* Millora visual del strong */
+.side-card strong {
+    font-weight: 600;
+    color: #1f2d3d;
+}
+
+.side-card ul li:last-child {
+    margin-bottom: 0;
+}
