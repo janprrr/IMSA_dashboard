@@ -1,83 +1,41 @@
 <!DOCTYPE html>
 <html lang="ca">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IMSA Dashboard</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IMSA Strategy Dashboard</title>
+  <link rel="stylesheet" href="css/index.css">
 </head>
-
 <body>
-    <header>
-        <div class="headerText">
-            <h1>IMSA Strategy Dashboard</h1>
-            <p class="subtitle">Rolex 24 at Daytona 2026</p>
-        </div>
-        <div class="logo">
-            <img src="./img/logo/Rolex_24_at_Daytona.png" alt="Daytona24h">
-        </div>
-    </header>
 
-    <div id="status">Carregant dades...</div>
-    <main>
-        <div class="col-main">
-            <h2>Llistat cotxes</h2>
-            <div id="filtres">
-                <button class="filtre actiu" data-classe="tots">Tots</button>
-                <button class="filtre" data-classe="GTP">GTP</button>
-                <button class="filtre" data-classe="GTDPRO">GTD Pro</button>
-                <button class="filtre" data-classe="GTD">GTD</button>
-                <button class="filtre" data-classe="LMP2">LMP2</button>
-            </div>
+<div class="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-label">WeatherTech SportsCar Championship</p>
+    <h1>IMSA Strategy<br>Dashboard</h1>
+    <p class="hero-sub">Anàlisi d'estratègia i telemetria per a cada cursa de la temporada</p>
+  </div>
+</div>
 
-            <div id="grafic-container" style="display:none">
-                <div id="grafic-header">
-                    <span id="grafic-titol"></span>
-                    <button id="grafic-tancar">Tancar</button>
-                </div>
-                <canvas id="grafic"></canvas>
-            </div>
+  <nav class="temporada-nav">
+    <div class="nav-inner">
+      <span class="nav-label">Temporada</span>
+      <div id="temporada-botons"></div>
+    </div>
+  </nav>
 
-            <div id="car-list"></div>
-        </div>
-        <div class="col-track">
-            <h2>Informació del circuit</h2>
-            <hr>
-            <p class="subtitle">Traçat</p>
-            <img class="imatge" src="./img/layouts/Group_19.webp" alt="daytonaLayout">
+  <main class="main-content">
+    <div id="cursa-list"></div>
+  </main>
 
-            <section class="track-info">
-                <h2>Track information</h2>
+  <footer>
+    <div class="footer-inner">
+      <span>IMSA Strategy Dashboard</span>
+      <span>Dades: <a href="https://github.com/tobi/imsa_data" target="_blank">tobi/imsa_data</a></span>
+    </div>
+  </footer>
 
-                <ul>
-                    <li><strong>Circuit:</strong> Daytona International Speedway</li>
-                    <li><strong>Ubicació:</strong> Daytona Beach, Florida (EUA)</li>
-                    <li><strong>Longitud:</strong> 5.73 km</li>
-                    <li><strong>Tipus:</strong> Oval + infield road course</li>
-                    <li><strong>Pendent màxim:</strong> ~31°</li>
-                    <li><strong>Superfície:</strong> Asfalt</li>
-                </ul>
-
-                <p class="track-note">
-                    Circuit d’alta velocitat que combina trams d’oval amb seccions
-                    tècniques interiors. La gestió del trànsit multicategoria,
-                    el consum de combustible i el timing de les parades són claus
-                    en curses de 24 hores.
-                </p>
-            </section>
-
-            <section class="side-card" id="race-stats"></section>
-
-            <section class="side-card" id="class-stats"></section>
-
-
-        </div>
-    </main>
-
-    <script src="js/main.js"></script>
+  <script src="js/index.js"></script>
 </body>
-
 </html>
