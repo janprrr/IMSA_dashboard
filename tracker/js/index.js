@@ -1,4 +1,5 @@
-
+const params = new URLSearchParams(window.location.search)
+const anyActiu = parseInt(params.get('any'), 10)
 
 const TEMPORADES = [
   {
@@ -13,7 +14,7 @@ const TEMPORADES = [
         fitxer: '202601241340-race-laps.csv',
         fitxerResultats: '202601241340-race-results.csv',
         logo: './img/logo/Rolex_24_at_Daytona.png',
-        layout: './img/layouts/daytona.webp',
+        layout: './img/layouts/daytona.png',
         info: {
           ubicacio: 'Daytona Beach, Florida (EUA)',
           longitud: '5.73 km',
@@ -30,7 +31,7 @@ const TEMPORADES = [
         carpeta: '06-sebring-international-raceway',
         fitxer: '202603211010-race-hour-12-laps.csv',
         fitxerResultats: '202603211010-race-hour-12-results.csv',
-        logo: './img/logo/sebring.png',
+        logo: './img/logo/sebring.jpg',
         layout: './img/layouts/sebring.png',
         info: {
           ubicacio: 'Sebring, Florida (EUA)',
@@ -278,7 +279,7 @@ const TEMPORADES = [
         carpeta: '11-detroit-street-course',
         fitxer: '202505311640-race-laps.csv',
         fitxerResultats: '202505311640-race-results.csv',
-        logo: './img/logo/detroit.png',
+        logo: './img/logo/detroit_logo.png',
         layout: './img/layouts/detroit.png',
         info: {
           ubicacio: 'Detroit, Michigan (EUA)',
@@ -387,7 +388,7 @@ const TEMPORADES = [
         fitxer: '202510111210-race-laps.csv',
         fitxerResultats: '202510111210-race-results.csv',
         logo: './img/logo/road-atlanta.png',
-        layout: './img/layout/road-atlanta.png',
+        layout: './img/layouts/road-atlanta.png',
         info: {
           ubicacio: 'Braselton, Geòrgia (EUA)',
           longitud: '4.09 km',
@@ -427,18 +428,27 @@ function activarAnimacions() {
 function pintarCurses() {
   const contenidor = document.getElementById('cursa-list')
   const botonesContenidor = document.getElementById('temporada-botons')
-  let temporadaActiva = TEMPORADES[0].any
+  let temporadaActiva =
+    TEMPORADES.some(t => t.any === anyActiu)
+      ? anyActiu
+      : TEMPORADES[0].any
 
   // botons de temporada
   TEMPORADES.forEach((temporada, i) => {
     const btn = document.createElement('button')
-    btn.className = 'btn-temporada' + (i === 0 ? ' actiu' : '')
+    btn.className = 'btn-temporada' + (temporada.any === temporadaActiva ? ' actiu' : '')
     btn.textContent = temporada.any
     btn.addEventListener('click', () => {
       document.querySelectorAll('.btn-temporada').forEach(b => b.classList.remove('actiu'))
       btn.classList.add('actiu')
+
       document.querySelectorAll('.temporada-bloc').forEach(b => b.classList.remove('visible'))
       document.getElementById(`temporada-${temporada.any}`).classList.add('visible')
+
+      //actualitzem la URL sense recarregar
+      const params = new URLSearchParams(window.location.search)
+      params.set('any', temporada.any)
+      history.replaceState(null, '', `?${params.toString()}`)
     })
     botonesContenidor.appendChild(btn)
   })
@@ -446,7 +456,7 @@ function pintarCurses() {
   // blocs per temporada
   TEMPORADES.forEach((temporada, i) => {
     const bloc = document.createElement('div')
-    bloc.className = 'temporada-bloc' + (i === 0 ? ' visible' : '')
+    bloc.className = 'temporada-bloc' + (temporada.any === temporadaActiva ? ' visible' : '')
     bloc.id = `temporada-${temporada.any}`
 
     const grid = document.createElement('div')
@@ -473,6 +483,7 @@ function pintarCurses() {
       if (cursa.fitxer) {
         card.addEventListener('click', () => {
           const params = new URLSearchParams({
+            any: temporada.any,
             carpeta: cursa.carpeta,
             fitxer: cursa.fitxer,
             fitxerResultats: cursa.fitxerResultats || '',

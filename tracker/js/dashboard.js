@@ -1,12 +1,18 @@
 const params = new URLSearchParams(window.location.search)
+const any = params.get('any')
 const carpeta = params.get('carpeta')
 const fitxer = params.get('fitxer')
 const nom = params.get('nom')
 const fitxerResultats = params.get('fitxerResultats')
+const btnTotesCurses = document.getElementById('btn-totes-curses')
+
+if (btnTotesCurses && any) {
+  btnTotesCurses.href = `index.html?any=${encodeURIComponent(any)}`
+}
 const RESULTS_URL = fitxerResultats
-  ? `https://raw.githubusercontent.com/tobi/imsa_data/refs/heads/main/data/imsa/2026/${carpeta}/${fitxerResultats}`
+  ? `https://raw.githubusercontent.com/tobi/imsa_data/refs/heads/main/data/imsa/${any}/${carpeta}/${fitxerResultats}`
   : null
-const CSV_URL = `https://raw.githubusercontent.com/tobi/imsa_data/refs/heads/main/data/imsa/2026/${carpeta}/${fitxer}`
+const CSV_URL = `https://raw.githubusercontent.com/tobi/imsa_data/refs/heads/main/data/imsa/${any}/${carpeta}/${fitxer}`
 
 
 
@@ -52,40 +58,40 @@ let totesDades = []
 let totesLesVoltes = []
 
 function formatarTemps(segons) {
-    const minuts = Math.floor(segons / 60)
-    const seg = (segons % 60).toFixed(3).padStart(6, '0')
-    return `${minuts}:${seg}`
+  const minuts = Math.floor(segons / 60)
+  const seg = (segons % 60).toFixed(3).padStart(6, '0')
+  return `${minuts}:${seg}`
 }
 
 function minutsASegons(temps) {
-    // converteix "2:55.481" a 175.481
-    const parts = temps.trim().split(':')
-    if (parts.length !== 2) return Infinity
-    return parseFloat(parts[0]) * 60 + parseFloat(parts[1])
+  // converteix "2:55.481" a 175.481
+  const parts = temps.trim().split(':')
+  if (parts.length !== 2) return Infinity
+  return parseFloat(parts[0]) * 60 + parseFloat(parts[1])
 }
 
 function millorTempsPerCotxe(laps) {
-    const cotxes = {}
+  const cotxes = {}
 
-    laps.forEach(lap => {
-        const num = lap['NUMBER']?.trim()
-        const temps = minutsASegons(lap[' LAP_TIME'] || '')
-        const equip = lap['TEAM']?.trim()
-        const classe = lap['CLASS']?.trim()
+  laps.forEach(lap => {
+    const num = lap['NUMBER']?.trim()
+    const temps = minutsASegons(lap[' LAP_TIME'] || '')
+    const equip = lap['TEAM']?.trim()
+    const classe = lap['CLASS']?.trim()
 
-        if (!num || isNaN(temps) || temps < 60) return
+    if (!num || isNaN(temps) || temps < 60) return
 
-        if (!cotxes[num]) {
-            cotxes[num] = { numero: num, equip, classe, millorTemps: Infinity }
-        }
+    if (!cotxes[num]) {
+      cotxes[num] = { numero: num, equip, classe, millorTemps: Infinity }
+    }
 
-        if (temps < cotxes[num].millorTemps) {
-            cotxes[num].millorTemps = temps
-            cotxes[num].millorVolta = parseInt(lap[' LAP_NUMBER'])
-        }
-    })
+    if (temps < cotxes[num].millorTemps) {
+      cotxes[num].millorTemps = temps
+      cotxes[num].millorVolta = parseInt(lap[' LAP_NUMBER'])
+    }
+  })
 
-    return Object.values(cotxes).sort((a, b) => a.millorTemps - b.millorTemps)
+  return Object.values(cotxes).sort((a, b) => a.millorTemps - b.millorTemps)
 }
 
 function pintarCotxes(cotxes) {
@@ -112,14 +118,17 @@ function pintarCotxes(cotxes) {
     // construïm la llista de pilots
     const pilotsHTML = cotxe.pilots.length > 0
       ? cotxe.pilots.map(p =>
-          `<span class="pilot-nom">${p.nom} ${p.cognom}${p.rating ? ` <span class="pilot-rating">${p.rating}</span>` : ''}</span>`
-        ).join('')
+        `<span class="pilot-nom">${p.nom} ${p.cognom}${p.rating ? ` <span class="pilot-rating">${p.rating}</span>` : ''}</span>`
+      ).join('')
       : '<span class="pilot-nom" style="opacity:0.4">Sense dades</span>'
+
+    // si mai es vol posar la posicio en la que han quedat es aixi
+    //<span class="car-position">${cotxe.posicio ?? '—'}</span>
 
     card.innerHTML = `
       <div class="card-top">
         <div class="card-left">
-          <span class="car-position">${cotxe.posicio ?? '—'}</span>
+          
           <span class="car-number">#${cotxe.numero}</span>
         </div>
         <div class="car-info">
@@ -149,16 +158,16 @@ function pintarCotxes(cotxes) {
 
 function pintarInfoCircuit() {
   // llegim tots els paràmetres de la URL
-  const circuit  = params.get('circuit')
-  const data     = params.get('data')
-  const durada   = params.get('durada')
-  const logo     = params.get('logo')
-  const layout   = params.get('layout')
+  const circuit = params.get('circuit')
+  const data = params.get('data')
+  const durada = params.get('durada')
+  const logo = params.get('logo')
+  const layout = params.get('layout')
   const ubicacio = params.get('ubicacio')
   const longitud = params.get('longitud')
-  const tipus    = params.get('tipus')
+  const tipus = params.get('tipus')
   const superficie = params.get('superficie')
-  const nota     = params.get('nota')
+  const nota = params.get('nota')
 
   // logo al header
   const logoEl = document.querySelector('.logo img')
@@ -212,6 +221,7 @@ async function init() {
 
     const statsClasses = statsPerClasse(cotxes)
     pintarStatsClasses(statsClasses)
+    actualitzarFiltres(statsClasses)
 
     pintarCotxes(totesDades)
     configurarFiltres()
@@ -222,6 +232,29 @@ async function init() {
     console.error(error)
   }
 }
+
+function actualitzarFiltres(statsClasses) {
+  const botons = document.querySelectorAll('.filtre')
+
+  botons.forEach(boto => {
+    const classe = boto.dataset.classe
+
+    // "tots" sempre visible
+    if (classe === 'tots') {
+      boto.classList.remove('ocult')
+      return
+    }
+
+    const total = statsClasses[classe] || 0
+
+    if (total > 0) {
+      boto.classList.remove('ocult')
+    } else {
+      boto.classList.add('ocult')
+    }
+  })
+}
+
 
 function aplicarOrdreResultats(cotxes, resultats) {
   if (!resultats || resultats.length === 0) return cotxes
@@ -266,133 +299,133 @@ function aplicarOrdreResultats(cotxes, resultats) {
 }
 
 function configurarFiltres() {
-    const botons = document.querySelectorAll('.filtre')
-    //amagar grafic al fer clic
-    //document.getElementById('grafic-container').style.display = 'none'
-    //if (graficActual) graficActual.destroy()
+  const botons = document.querySelectorAll('.filtre')
+  //amagar grafic al fer clic
+  //document.getElementById('grafic-container').style.display = 'none'
+  //if (graficActual) graficActual.destroy()
 
-    botons.forEach(boto => {
-        boto.addEventListener('click', () => {
-            // 1. treure la classe 'actiu' de tots els botons
-            botons.forEach(b => b.classList.remove('actiu'))
+  botons.forEach(boto => {
+    boto.addEventListener('click', () => {
+      // 1. treure la classe 'actiu' de tots els botons
+      botons.forEach(b => b.classList.remove('actiu'))
 
-            // 2. posar la classe 'actiu' al botó clicat
-            boto.classList.add('actiu')
+      // 2. posar la classe 'actiu' al botó clicat
+      boto.classList.add('actiu')
 
-            // 3. llegir quin filtre hem seleccionat
-            const classe = boto.dataset.classe
+      // 3. llegir quin filtre hem seleccionat
+      const classe = boto.dataset.classe
 
-            // 4. filtrar les dades
-            if (classe === 'tots') {
-                pintarCotxes(totesDades)
-            } else {
-                const filtrades = totesDades.filter(cotxe => cotxe.classe === classe)
-                pintarCotxes(filtrades)
-            }
+      // 4. filtrar les dades
+      if (classe === 'tots') {
+        pintarCotxes(totesDades)
+      } else {
+        const filtrades = totesDades.filter(cotxe => cotxe.classe === classe)
+        pintarCotxes(filtrades)
+      }
 
-        })
     })
+  })
 }
 
 
 let graficActual = null   // guardem la instància del gràfic
 
 function mostrarGrafic(numeroCotxe, equip, cardElement) {
-    // 1. agafem totes les voltes d'aquest cotxe, ordenades per número de volta
-    const voltes = totesLesVoltes
-        .filter(lap => lap['NUMBER']?.trim() === numeroCotxe)
-        .filter(lap => lap[' LAP_NUMBER']?.trim() !== '1')  // traiem la primera volta (outlap llarga)
-        .map(lap => ({
-            volta: parseInt(lap[' LAP_NUMBER']),
-            temps: minutsASegons(lap[' LAP_TIME'] || '')
-        }))
-        .filter(v => v.temps > 60 && v.temps < 300)  // traiem voltes anòmales
-        .sort((a, b) => a.volta - b.volta)
+  // 1. agafem totes les voltes d'aquest cotxe, ordenades per número de volta
+  const voltes = totesLesVoltes
+    .filter(lap => lap['NUMBER']?.trim() === numeroCotxe)
+    .filter(lap => lap[' LAP_NUMBER']?.trim() !== '1')  // traiem la primera volta (outlap llarga)
+    .map(lap => ({
+      volta: parseInt(lap[' LAP_NUMBER']),
+      temps: minutsASegons(lap[' LAP_TIME'] || '')
+    }))
+    .filter(v => v.temps > 60 && v.temps < 300)  // traiem voltes anòmales
+    .sort((a, b) => a.volta - b.volta)
 
-    // 2. mostrem el contenidor
-    const container = document.getElementById('grafic-container')
+  // 2. mostrem el contenidor
+  const container = document.getElementById('grafic-container')
 
-    cardElement.after(container)
+  cardElement.after(container)
 
-    container.style.display = 'block'
-    document.getElementById('grafic-titol').textContent = `#${numeroCotxe} ${equip}`
+  container.style.display = 'block'
+  document.getElementById('grafic-titol').textContent = `#${numeroCotxe} ${equip}`
 
-    // 3. si ja hi havia un gràfic anterior, el destruïm
-    if (graficActual) graficActual.destroy()
+  // 3. si ja hi havia un gràfic anterior, el destruïm
+  if (graficActual) graficActual.destroy()
 
-    // 4. creem el gràfic amb Chart.js
-    const ctx = document.getElementById('grafic').getContext('2d')
-    graficActual = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: voltes.map(v => `V${v.volta}`),
-            datasets: [{
-                label: 'Temps de volta',
-                data: voltes.map(v => v.temps),
-                borderColor: '#185FA5',
-                borderWidth: 1.5,
-                pointRadius: 2,
-                tension: 0.1
-            }]
-        },
-        options: {
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: context => 'Temps: ' + formatarTemps(context.parsed.y)
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    ticks: {
-                        callback: val => formatarTemps(val)
-                    }
-                }
-            }
+  // 4. creem el gràfic amb Chart.js
+  const ctx = document.getElementById('grafic').getContext('2d')
+  graficActual = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: voltes.map(v => `V${v.volta}`),
+      datasets: [{
+        label: 'Temps de volta',
+        data: voltes.map(v => v.temps),
+        borderColor: '#185FA5',
+        borderWidth: 1.5,
+        pointRadius: 2,
+        tension: 0.1
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: context => 'Temps: ' + formatarTemps(context.parsed.y)
+          }
         }
-    })
-
-    // 5. botó de tancar
-    document.getElementById('grafic-tancar').onclick = () => {
-        container.style.display = 'none'
-        if (graficActual) graficActual.destroy()
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: val => formatarTemps(val)
+          }
+        }
+      }
     }
+  })
+
+  // 5. botó de tancar
+  document.getElementById('grafic-tancar').onclick = () => {
+    container.style.display = 'none'
+    if (graficActual) graficActual.destroy()
+  }
 }
 
 
 function calcularStatsGlobals(laps) {
-    const cotxes = new Set()
-    let millorTemps = Infinity
-    let millorCotxe = null
+  const cotxes = new Set()
+  let millorTemps = Infinity
+  let millorCotxe = null
 
-    laps.forEach(lap => {
-        const num = lap['NUMBER']?.trim()
-        const temps = minutsASegons(lap[' LAP_TIME'] || '')
+  laps.forEach(lap => {
+    const num = lap['NUMBER']?.trim()
+    const temps = minutsASegons(lap[' LAP_TIME'] || '')
 
-        if (num) cotxes.add(num)
+    if (num) cotxes.add(num)
 
-        if (!isNaN(temps) && temps > 60 && temps < millorTemps) {
-            millorTemps = temps
-            millorCotxe = {
-                numero: num,
-                equip: lap['TEAM']?.trim()
-            }
-        }
-    })
-
-    return {
-        totalCotxes: cotxes.size,
-        totalVoltes: laps.length,
-        millorVolta: millorTemps,
-        millorCotxe
+    if (!isNaN(temps) && temps > 60 && temps < millorTemps) {
+      millorTemps = temps
+      millorCotxe = {
+        numero: num,
+        equip: lap['TEAM']?.trim()
+      }
     }
+  })
+
+  return {
+    totalCotxes: cotxes.size,
+    totalVoltes: laps.length,
+    millorVolta: millorTemps,
+    millorCotxe
+  }
 }
 
 function pintarStatsGlobals(stats) {
-    const el = document.getElementById('race-stats')
-    el.innerHTML = `
+  const el = document.getElementById('race-stats')
+  el.innerHTML = `
         <h3>Race statistics</h3>
         <ul>
             <li><strong>Cotxes:</strong> ${stats.totalCotxes}</li>
@@ -404,29 +437,29 @@ function pintarStatsGlobals(stats) {
 }
 
 function pintarStatsClasses(stats) {
-    const el = document.getElementById('class-stats')
+  const el = document.getElementById('class-stats')
 
-    el.innerHTML = `
+  el.innerHTML = `
         <h3>Cotxes per cada categoria</h3>
         <ul>
             ${Object.entries(stats)
-            .map(([classe, n]) =>
-                `<li><strong>${classe}:</strong> ${n}</li>`
-            )
-            .join('')}
+      .map(([classe, n]) =>
+        `<li><strong>${classe}:</strong> ${n}</li>`
+      )
+      .join('')}
         </ul>
     `
 }
 
 function statsPerClasse(cotxes) {
-    const comptador = {}
+  const comptador = {}
 
-    cotxes.forEach(c => {
-        const classe = c.classe || 'Desconeguda'
-        comptador[classe] = (comptador[classe] || 0) + 1
-    })
+  cotxes.forEach(c => {
+    const classe = c.classe || 'Desconeguda'
+    comptador[classe] = (comptador[classe] || 0) + 1
+  })
 
-    return comptador
+  return comptador
 }
 
 
