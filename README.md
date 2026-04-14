@@ -13,8 +13,8 @@
   <img src="https://img.shields.io/badge/Papa_Parse-2E7D32?style=for-the-badge" alt="Papa Parse">
 </p>
 
-<p>
-  <img src="./img/hero-bg.jpg" alt="IMSA Strategy Dashboard hero image" width="100%">
+<p align="center">
+<img src="./tracker/img/hero-bg.jpg" alt="IMSA Strategy Dashboard hero image">
 </p>
 
 </div>
@@ -79,23 +79,6 @@ Once a race is selected, the dashboard loads a dedicated event view with:
 
 ---
 
-## Preview
-
-<div align="center">
-
-### Main season selection view
-<img src="./img/readme/index-preview.png" alt="Main season selection view" width="900">
-
-### Race dashboard view
-<img src="./img/readme/dashboard-preview.png" alt="Race dashboard view" width="900">
-
-### Lap-time chart example
-<img src="./img/readme/chart-preview.png" alt="Lap-time chart example" width="900">
-
-</div>
-
----
-
 ## Design Direction
 
 The visual identity of the project is intentionally built around a few core ideas:
@@ -143,10 +126,6 @@ tracker/
 ├── img/
 │   ├── hero-bg.jpg
 │   ├── layouts/
-│   ├── logo/
-│   └── readme/
-│       ├── index-preview.png
-│       ├── dashboard-preview.png
-│       └── chart-preview.png
+│   └── logo/
 │
 └── data/
