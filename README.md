@@ -1,102 +1,126 @@
-# IMSA Strategy Dashboard
 
-A lightweight, interactive web dashboard for exploring **IMSA WeatherTech SportsCar Championship** race data, including **season navigation**, **race selection**, **lap-time analysis**, **category-based filtering**, and **race-level statistics**.
+<div align="center">
 
-This project currently supports multiple IMSA events across the **2025** and **2026** seasons, using official-style race lap and results data loaded from external CSV files.
+# 🏁 IMSA Strategy Dashboard
+
+### *Endurance racing data, reimagined as a clean and visual web experience.*
+
+<p>
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
+  <img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white" alt="Chart.js">
+  <img src="https://img.shields.io/badge/Papa_Parse-2E7D32?style=for-the-badge" alt="Papa Parse">
+</p>
+
+<p>
+  <img src="./img/hero-bg.jpg" alt="IMSA Strategy Dashboard hero image" width="100%">
+</p>
+
+</div>
 
 ---
 
 ## Overview
 
-**IMSA Strategy Dashboard** is a front-end web application designed to make endurance racing data easier to browse and analyze.
+**IMSA Strategy Dashboard** is a front-end application built to turn raw IMSA timing data into a cleaner, more readable and visually structured race analysis experience.
 
-The application provides:
+The project combines **season browsing**, **event selection**, **lap-based performance analysis**, **interactive charts**, and **circuit-specific presentation** into a single interface designed around the logic and identity of endurance racing.
 
-- A **main season browser** with race cards grouped by year
-- A **race dashboard** for individual events
-- Per-car performance summaries based on lap timing data
-- Dynamic class filtering depending on the categories present in each race
-- Interactive lap-time charts
-- Circuit information, race details, and local visual assets (logos and track layouts)
-
-The project is built with **HTML, CSS, and vanilla JavaScript**, with no backend required.
+This is not intended to feel like a spreadsheet viewer or a generic stats panel.  
+The app is designed to feel closer to a **race-oriented analysis interface** built around event identity, clarity and visual structure.
 
 ---
 
-## Key Features
+## Why this project exists
 
-### Season and Race Navigation
-- Browse races by season
-- Switch between **2025** and **2026**
-- Preserve the selected season when navigating between the main page and the dashboard
+IMSA race data is rich, detailed and technically useful — but in its raw form it is often difficult to explore comfortably.
+
+This project was created to answer a simple question:
+
+> **What would IMSA race data feel like if it were presented as a focused, visual, event-driven web application?**
+
+The result is a dashboard that emphasizes:
+- clean navigation
+- race context
+- strong visual hierarchy
+- data readability
+- motorsport-inspired UI decisions
+
+---
+
+## Main Experience
+
+The application is split into two core views:
+
+### Season Browser
+The main page acts as a season-based race hub, allowing users to browse configured IMSA events through a visual card layout.
 
 ### Race Dashboard
-- Load race data dynamically using URL parameters
-- Display the selected race title, circuit information, logo, and layout
-- Show all participating cars with their best lap time
-
-### Category-Based Filtering
-- Filter entries by IMSA classes such as:
-  - `GTP`
-  - `LMP2`
-  - `GTDPRO`
-  - `GTD`
-- Automatically hide unavailable class filters when a race does not include cars from that category
-
-### Performance Insights
-- Best lap per car
-- Total number of cars
-- Total number of laps
-- Best lap of the race
-- Car count per category
-
-### Interactive Charts
-- Open a lap-time evolution chart for any car
-- Visualize lap consistency across the race
-- Display charts using **Chart.js**
-
-### Flexible Data Sources
-- Race lap data and result data are loaded from remote CSV files
-- Compatible with data hosted in external repositories
-- Designed around IMSA race exports from CSV sources
-
-### Local Visual Assets
-- Circuit logos
-- Track layout images
-- Hero/background artwork
-- Organized locally under the project’s `img/` directory
+Once a race is selected, the dashboard loads a dedicated event view with:
+- race identity
+- circuit visuals
+- race summary data
+- per-car performance blocks
+- lap evolution charting
+- structured event information
 
 ---
 
-## Screens and Flow
+## What the application focuses on
 
-### 1. Main Page
-The home page acts as a **season and race selector**.
-
-It includes:
-- Season buttons
-- Race cards
-- “Coming soon” handling for races without configured CSV data
-- Navigation to the detailed dashboard for each available race
-
-### 2. Race Dashboard
-Each race page is opened through query parameters and displays:
-- Race title
-- Circuit and event information
-- Race statistics
-- Class distribution
-- Per-car cards
-- Lap-time charts
+- Multi-season IMSA race navigation
+- Event-specific dashboards
+- Best-lap analysis per car
+- Lap-time evolution charts
+- Race summary metrics
+- Circuit information and branding
+- Lightweight, fully static front-end architecture
 
 ---
 
-## Tech Stack
+## Preview
+
+<div align="center">
+
+### Main season selection view
+<img src="./img/readme/index-preview.png" alt="Main season selection view" width="900">
+
+### Race dashboard view
+<img src="./img/readme/dashboard-preview.png" alt="Race dashboard view" width="900">
+
+### Lap-time chart example
+<img src="./img/readme/chart-preview.png" alt="Lap-time chart example" width="900">
+
+</div>
+
+---
+
+## Design Direction
+
+The visual identity of the project is intentionally built around a few core ideas:
+
+- **Dark UI** inspired by motorsport broadcast and race telemetry tools
+- **Compact information blocks** with high data density
+- **Event-specific visuals** through logos and track layouts
+- **Minimal but expressive accents** for classes and categories
+- **Structured navigation** between season overview and race detail
+
+The goal is to make the application feel **purpose-built for race exploration**, not like a generic admin dashboard with racing data inserted into it.
+
+---
+
+## Core Stack
+
+This project is intentionally kept lightweight and transparent:
 
 - **HTML5**
 - **CSS3**
 - **Vanilla JavaScript**
-- **[Papa Parse](https://www.papaparse.com/)** — CSV parsing
-- **[Chart.js](https://www.chartjs.org/)** — lap-time visualization
+- **Papa Parse** for CSV parsing
+- **Chart.js** for lap-time visualization
+
+No framework is required, and no backend is necessary.
 
 ---
 
@@ -119,9 +143,10 @@ tracker/
 ├── img/
 │   ├── hero-bg.jpg
 │   ├── layouts/
-│   │   └── png files of the track
-│   │
-│   └── logo/
-│       └── png images of the race "logo"
+│   ├── logo/
+│   └── readme/
+│       ├── index-preview.png
+│       ├── dashboard-preview.png
+│       └── chart-preview.png
 │
 └── data/
