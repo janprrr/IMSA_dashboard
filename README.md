@@ -107,6 +107,12 @@ No framework is required, and no backend is necessary.
 
 ---
 
+## Data
+
+Race data used by this dashboard is sourced from the public [tobi/imsa_data](https://github.com/tobi/imsa_data) repository. Huge thanks to Tobias Lütke for making IMSA race data more accessible for analysis and visualization.
+
+---
+
 ## Project Structure
 
 ```text
