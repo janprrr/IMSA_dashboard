@@ -1,4 +1,3 @@
-
 <div align="center">
 
 # 🏁 IMSA Strategy Dashboard
@@ -23,59 +22,74 @@
 
 ## Overview
 
-**IMSA Strategy Dashboard** is a front-end application built to turn raw IMSA timing data into a cleaner, more readable and visually structured race analysis experience.
+**IMSA Strategy Dashboard** is a front-end project built to transform official IMSA timing and race data into a cleaner, more visual and more intuitive experience.
 
-The project combines **season browsing**, **event selection**, **lap-based performance analysis**, **interactive charts**, and **circuit-specific presentation** into a single interface designed around the logic and identity of endurance racing.
+Instead of presenting the data as raw tables or isolated CSV files, the application organizes each event into a structured race dashboard focused on **clarity**, **context**, and **readability**.
 
-This is not intended to feel like a spreadsheet viewer or a generic stats panel.  
-The app is designed to feel closer to a **race-oriented analysis interface** built around event identity, clarity and visual structure.
+The goal is to make endurance racing data feel easier to explore, while still preserving the identity and rhythm of each race weekend.
 
 ---
 
 ## Why this project exists
 
-IMSA race data is rich, detailed and technically useful — but in its raw form it is often difficult to explore comfortably.
+IMSA data is incredibly rich, but in its raw form it can feel difficult to navigate casually.
 
-This project was created to answer a simple question:
+This project was created around a simple idea:
 
-> **What would IMSA race data feel like if it were presented as a focused, visual, event-driven web application?**
+> **What if official IMSA race data felt like a polished race analysis interface instead of a collection of files?**
 
-The result is a dashboard that emphasizes:
-- clean navigation
-- race context
-- strong visual hierarchy
-- data readability
-- motorsport-inspired UI decisions
+The application focuses on turning public race data into something that feels:
+- visual
+- readable
+- event-driven
+- easier to explore
+- closer to a motorsport analysis tool than a spreadsheet viewer
 
 ---
 
 ## Main Experience
 
-The application is split into two core views:
+The project is built around two main views:
 
 ### Season Browser
-The main page acts as a season-based race hub, allowing users to browse configured IMSA events through a visual card layout.
+A season-based race hub where events can be explored through a clean card-based layout.
 
 ### Race Dashboard
-Once a race is selected, the dashboard loads a dedicated event view with:
-- race identity
-- circuit visuals
-- race summary data
-- per-car performance blocks
-- lap evolution charting
-- structured event information
+A dedicated event page that brings together the full identity of a race, including:
+- event branding
+- circuit presentation
+- race context
+- structured per-car summaries
+- performance charts
+- strategy-oriented race reading
 
 ---
 
-## What the application focuses on
+## What the application includes
 
-- Multi-season IMSA race navigation
-- Event-specific dashboards
-- Best-lap analysis per car
-- Lap-time evolution charts
-- Race summary metrics
-- Circuit information and branding
-- Lightweight, fully static front-end architecture
+- Multi-season race browsing
+- Event-based IMSA dashboards
+- Circuit information and visual identity
+- Per-car race summary cards
+- Interactive lap-time charts
+- Race context panels
+- Strategy-focused views for each car
+- Clean navigation between overview and detailed analysis
+
+---
+
+## Strategy and race reading
+
+One of the core ideas behind the dashboard is to go beyond simple lap-time viewing.
+
+The project now includes a more strategy-oriented reading of each race through:
+- stop-based summaries
+- stint structure
+- pit timing context
+- strategy timelines
+- visual indication of race interruptions and stop windows
+
+This helps each event feel less like a static data page and more like a readable race story.
 
 ---
 
@@ -83,33 +97,37 @@ Once a race is selected, the dashboard loads a dedicated event view with:
 
 The visual identity of the project is intentionally built around a few core ideas:
 
-- **Dark UI** inspired by motorsport broadcast and race telemetry tools
-- **Compact information blocks** with high data density
-- **Event-specific visuals** through logos and track layouts
-- **Minimal but expressive accents** for classes and categories
-- **Structured navigation** between season overview and race detail
+- **Dark motorsport-inspired UI**
+- **Compact information blocks**
+- **Clear hierarchy between overview and detail**
+- **Event-specific visuals through logos and layouts**
+- **Subtle accent colors for categories and interactive elements**
+- **A cleaner and more premium feeling than raw race data usually offers**
 
-The goal is to make the application feel **purpose-built for race exploration**, not like a generic admin dashboard with racing data inserted into it.
+The intention is not to mimic a generic dashboard template, but to create something that feels specifically designed for endurance racing analysis.
 
 ---
 
 ## Core Stack
 
-This project is intentionally kept lightweight and transparent:
+The project is intentionally lightweight and fully front-end based.
 
+It is built with:
 - **HTML5**
 - **CSS3**
 - **Vanilla JavaScript**
-- **Papa Parse** for CSV parsing
-- **Chart.js** for lap-time visualization
+- **Papa Parse**
+- **Chart.js**
 
-No framework is required, and no backend is necessary.
+No framework is required and no backend is needed.
 
 ---
 
 ## Data
 
-Race data used by this dashboard is sourced from the public [tobi/imsa_data](https://github.com/tobi/imsa_data) repository. Huge thanks to Tobias Lütke for making IMSA race data more accessible for analysis and visualization.
+Race data used in this dashboard is sourced from the public [tobi/imsa_data](https://github.com/tobi/imsa_data) repository.
+
+Huge thanks to Tobias Lütke for making IMSA race data more accessible for analysis and visualization.
 
 ---
 
