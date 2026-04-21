@@ -50,8 +50,9 @@ const TEMPORADES = [
         data: '17–19 abril 2026',
         durada: '1h40',
         carpeta: '07-long-beach-street-circuit',
-        fitxer: null,   //← pendent confirmar
-        fitxerWeather: null,
+        fitxer: '202604181305-race-laps.csv',
+        fitxerResultats: '202604181305-race-results.csv',
+        fitxerWeather: '202604181305-race-weather.csv',
         logo: './img/logo/long-beach.png',
         layout: './img/layouts/long-beach.png',
         info: {
