@@ -66,12 +66,12 @@ const TEMPORADES = [
       {
         nom: 'Monterey SportsCar Championship',
         circuit: 'WeatherTech Raceway Laguna Seca',
-        data: 'Maig 2026',
+        data: '01-03 Maig 2026',
         durada: '2h40',
-        carpeta: '10-weathertech-raceway-laguna-seca',
-        fitxer: null,
-        fitxerWeather: null,
-
+        carpeta: '09-weathertech-raceway-laguna-seca',
+        fitxer: '202605031310-race-laps.csv',
+        fitxerResultats: '202605031310-race-results.csv',
+        fitxerWeather: '202605031310-race-weather.csv',
         logo: './img/logo/laguna-seca.png',
         layout: './img/layouts/laguna-seca.png',
         info: {
@@ -85,12 +85,12 @@ const TEMPORADES = [
       {
         nom: 'Detroit Grand Prix',
         circuit: 'Detroit Street Course',
-        data: 'Maig 2026',
+        data: '29-30 Maig 2026',
         durada: '1h40',
         carpeta: '11-detroit-street-course',
-        fitxer: null,
-        fitxerWeather: null,
-
+        fitxer: '202605301610-race-laps.csv',
+        fitxerResultats: '202605301610-race-results.csv',
+        fitxerWeather: '202605301610-race-weather.csv',
         logo: './img/logo/detroit_logo.jpg',
         layout: './img/layouts/detroit.png',
         info: {
