@@ -131,28 +131,62 @@ Huge thanks to Tobias Lütke for making IMSA race data more accessible for analy
 
 ---
 
+## How to Run Locally
+
+This project is a static front-end web application, so it can be run with any local web server.
+
+### Using Python
+
+From the root of the repository, run:
+
+```bash
+python -m http.server 8000
+```
+
+Then open the dashboard in your browser:
+
+```text
+http://localhost:8000/tracker/
+```
+
+### Using VS Code Live Server
+
+If you use Visual Studio Code, you can also run the project with the **Live Server** extension:
+
+1. Open the repository in VS Code.
+2. Open `tracker/index.html`.
+3. Right-click inside the file.
+4. Select **Open with Live Server**.
+
+### Important note
+
+Opening `index.html` directly with `file://` is not recommended because the dashboard loads external CSV/data files with `fetch()`, which may not work correctly without a local server.
+
 ## Project Structure
 
 ```text
-tracker/
-├── index.html
-├── dashboard.html
+IMSA_dashboard/
 ├── README.md
+├── LICENSE
 │
-├── css/
-│   ├── index.css
-│   └── styles.css
-│
-├── js/
-│   ├── index.js
-│   └── dashboard.js
-│
-├── img/
-│   ├── hero-bg.jpg
-│   ├── layouts/
-│   └── logo/
-│
-└── data/
+└── tracker/
+    ├── index.html
+    ├── dashboard.html
+    │
+    ├── css/
+    │   ├── index.css
+    │   └── styles.css
+    │
+    ├── js/
+    │   ├── index.js
+    │   └── dashboard.js
+    │
+    ├── img/
+    │   ├── hero-bg.jpg
+    │   ├── layouts/
+    │   └── logo/
+    │
+    └── data/
 ```
 
 ## License
