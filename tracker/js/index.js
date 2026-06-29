@@ -104,10 +104,11 @@ const TEMPORADES = [
       {
         nom: 'Sahlen\'s Six Hours of The Glen',
         circuit: 'Watkins Glen International',
-        data: 'Juny 2026',
+        data: '27-29 Juny 2026',
         durada: '6h',
         carpeta: '14-watkins-glen-international',
         fitxer: null,
+        fitxerResultats: null,
         fitxerWeather: null,
 
         logo: './img/logo/watkins-glen.png',
@@ -127,6 +128,7 @@ const TEMPORADES = [
         durada: '2h40',
         carpeta: '15-canadian-tire-motorsport-park',
         fitxer: null,
+        fitxerResultats: null,
         fitxerWeather: null,
 
         logo: './img/logo/ctmp.png',
@@ -146,6 +148,7 @@ const TEMPORADES = [
         durada: '6h',
         carpeta: '16-road-america',
         fitxer: null,
+        fitxerResultats: null,
         fitxerWeather: null,
 
         logo: './img/logo/road-america.png',
@@ -165,6 +168,7 @@ const TEMPORADES = [
         durada: '2h40',
         carpeta: '17-virginia-international-raceway',
         fitxer: null,
+        fitxerResultats: null,
         fitxerWeather: null,
 
         logo: './img/logo/vir.png',
@@ -203,6 +207,7 @@ const TEMPORADES = [
         durada: '10h',
         carpeta: '22-road-atlanta',
         fitxer: null,
+        fitxerResultats: null,
         fitxerWeather: null,
 
         logo: './img/logo/road-atlanta.png',
@@ -468,6 +473,116 @@ function activarAnimacions() {
   }, 100)
 }
 
+const GITHUB_OWNER = 'tobi'
+const GITHUB_REPO = 'imsa_data'
+const GITHUB_BRANCH = 'main'
+const GITHUB_BASE_PATH = 'data/imsa'
+
+async function githubContents(path) {
+  const url =
+    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}` +
+    `/contents/${path}?ref=${GITHUB_BRANCH}`
+
+  const response = await fetch(url, {
+    headers: {
+      Accept: 'application/vnd.github+json'
+    }
+  })
+
+  if (!response.ok) {
+    throw new Error(`GitHub API error ${response.status}: ${url}`)
+  }
+
+  return await response.json()
+}
+
+function treurePrefixNumericCarpeta(carpeta) {
+  return String(carpeta || '').replace(/^\d+-/, '')
+}
+
+async function trobarCarpetaReal(any, carpetaConfigurada) {
+  const yearPath = `${GITHUB_BASE_PATH}/${any}`
+  const carpetes = await githubContents(yearPath)
+
+  const slugBuscat = treurePrefixNumericCarpeta(carpetaConfigurada)
+
+  const carpetaExacta = carpetes.find(item =>
+    item.type === 'dir' && item.name === carpetaConfigurada
+  )
+
+  if (carpetaExacta) {
+    return carpetaExacta.name
+  }
+
+  const carpetaPerSlug = carpetes.find(item =>
+    item.type === 'dir' &&
+    treurePrefixNumericCarpeta(item.name) === slugBuscat
+  )
+
+  return carpetaPerSlug ? carpetaPerSlug.name : carpetaConfigurada
+}
+
+function seleccionarFitxersCursa(files) {
+  const csvs = files
+    .filter(file => file.type === 'file' && file.name.toLowerCase().endsWith('.csv'))
+    .map(file => file.name)
+    .sort()
+    .reverse()
+
+  const fitxer = csvs.find(name =>
+    /race.*laps\.csv$/i.test(name)
+  ) || null
+
+  const fitxerResultats = csvs.find(name =>
+    /race.*results\.csv$/i.test(name)
+  ) || null
+
+  const fitxerWeather = csvs.find(name =>
+    /race.*weather\.csv$/i.test(name)
+  ) || null
+
+  return {
+    fitxer,
+    fitxerResultats,
+    fitxerWeather
+  }
+}
+
+async function completarCursaAmbFitxers(any, cursa) {
+  try {
+    const carpetaReal = await trobarCarpetaReal(any, cursa.carpeta)
+    const folderPath = `${GITHUB_BASE_PATH}/${any}/${carpetaReal}`
+
+    const files = await githubContents(folderPath)
+    const fitxers = seleccionarFitxersCursa(files)
+
+    return {
+      ...cursa,
+      carpeta: carpetaReal,
+      fitxer: cursa.fitxer || fitxers.fitxer,
+      fitxerResultats: cursa.fitxerResultats || fitxers.fitxerResultats,
+      fitxerWeather: cursa.fitxerWeather || fitxers.fitxerWeather
+    }
+  } catch (error) {
+    console.warn(
+      `No s'han pogut detectar fitxers per ${any} - ${cursa.nom}`,
+      error.message
+    )
+
+    return cursa
+  }
+}
+
+async function completarTemporadesAmbFitxers() {
+  for (const temporada of TEMPORADES) {
+    temporada.curses = await Promise.all(
+      temporada.curses.map(cursa =>
+        completarCursaAmbFitxers(temporada.any, cursa)
+      )
+    )
+  }
+}
+
 function pintarCurses() {
   const contenidor = document.getElementById('cursa-list')
   const botonesContenidor = document.getElementById('temporada-botons')
@@ -567,6 +682,12 @@ function activarParallax() {
 }
 
 activarParallax()
+
+
+async function initIndex() {
+  await completarTemporadesAmbFitxers()
+  pintarCurses()
+}
 
 
 pintarCurses()

@@ -1587,6 +1587,12 @@ function configurarFiltres() {
 
 async function init() {
   try {
+
+    if (!any || !carpeta || !fitxer) {
+      throw new Error('Falten paràmetres de cursa: any, carpeta o fitxer')
+    }
+
+
     const titol = document.getElementById('cursa-titol')
     if (titol) titol.textContent = nom || 'Cursa'
 
