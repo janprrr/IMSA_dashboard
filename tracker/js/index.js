@@ -1,3 +1,5 @@
+console.log('INDEX.JS CARREGAT - AUTO GITHUB TEST')
+
 const params = new URLSearchParams(window.location.search)
 const anyActiu = parseInt(params.get('any'), 10)
 
@@ -188,6 +190,7 @@ const TEMPORADES = [
         durada: '2h40',
         carpeta: '20-indianapolis-motor-speedway-rc',
         fitxer: null,
+        fitxerResultats: null,
         fitxerWeather: null,
 
         logo: './img/logo/indy.png',
@@ -478,10 +481,32 @@ const GITHUB_REPO = 'imsa_data'
 const GITHUB_BRANCH = 'main'
 const GITHUB_BASE_PATH = 'data/imsa'
 
+const githubCache = new Map()
+const GITHUB_CACHE_TTL_MS = 30 * 60 * 1000 // 30 minuts
+
 async function githubContents(path) {
+  const cacheKey = `github:${path}`
+  const cachedRaw = localStorage.getItem(cacheKey)
+
+  if (cachedRaw) {
+    try {
+      const cached = JSON.parse(cachedRaw)
+      const encaraValid = Date.now() - cached.timestamp < GITHUB_CACHE_TTL_MS
+
+      if (encaraValid) {
+        console.log('GitHub localStorage cache hit:', path)
+        return cached.data
+      }
+    } catch (error) {
+      localStorage.removeItem(cacheKey)
+    }
+  }
+
   const url =
     `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}` +
     `/contents/${path}?ref=${GITHUB_BRANCH}`
+
+  console.log('GitHub API request:', url)
 
   const response = await fetch(url, {
     headers: {
@@ -490,10 +515,19 @@ async function githubContents(path) {
   })
 
   if (!response.ok) {
+    const text = await response.text()
+    console.error('GitHub API error body:', text)
     throw new Error(`GitHub API error ${response.status}: ${url}`)
   }
 
-  return await response.json()
+  const data = await response.json()
+
+  localStorage.setItem(cacheKey, JSON.stringify({
+    timestamp: Date.now(),
+    data
+  }))
+
+  return data
 }
 
 function treurePrefixNumericCarpeta(carpeta) {
@@ -576,9 +610,17 @@ async function completarCursaAmbFitxers(any, cursa) {
 async function completarTemporadesAmbFitxers() {
   for (const temporada of TEMPORADES) {
     temporada.curses = await Promise.all(
-      temporada.curses.map(cursa =>
-        completarCursaAmbFitxers(temporada.any, cursa)
-      )
+      temporada.curses.map(cursa => {
+        const jaTeFitxers =
+          cursa.fitxer &&
+          cursa.fitxerResultats !== undefined
+
+        if (jaTeFitxers) {
+          return cursa
+        }
+
+        return completarCursaAmbFitxers(temporada.any, cursa)
+      })
     )
   }
 }
@@ -681,13 +723,29 @@ function activarParallax() {
   }, { passive: true })
 }
 
+
 activarParallax()
 
-
 async function initIndex() {
-  await completarTemporadesAmbFitxers()
-  pintarCurses()
+  console.log('1. initIndex executat')
+
+  try {
+    console.log('2. Abans de completar temporada activa')
+
+    await completarTemporadaActivaAmbFitxers()
+
+    console.log('3. Despres de completar temporada activa')
+    console.log('TEMPORADES:', TEMPORADES)
+
+    pintarCurses()
+
+    console.log('4. pintarCurses executat')
+  } catch (error) {
+    console.error('ERROR A initIndex:', error)
+
+    // Pintem igualment les curses manuals encara que GitHub falli
+    pintarCurses()
+  }
 }
 
-
-pintarCurses()
+initIndex()
