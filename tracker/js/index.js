@@ -190,7 +190,6 @@ const TEMPORADES = [
         durada: '2h40',
         carpeta: '20-indianapolis-motor-speedway-rc',
         fitxer: null,
-        fitxerResultats: null,
         fitxerWeather: null,
 
         logo: './img/logo/indy.png',
@@ -553,7 +552,12 @@ async function trobarCarpetaReal(any, carpetaConfigurada) {
     treurePrefixNumericCarpeta(item.name) === slugBuscat
   )
 
-  return carpetaPerSlug ? carpetaPerSlug.name : carpetaConfigurada
+  if (carpetaPerSlug) {
+    return carpetaPerSlug.name
+  }
+
+  // Important: si la carpeta encara no existeix a GitHub, retornem null
+  return null
 }
 
 function seleccionarFitxersCursa(files) {
@@ -607,7 +611,7 @@ async function completarCursaAmbFitxers(any, cursa) {
   }
 }
 
-async function completarTemporadesAmbFitxers() {
+async function completarTemporadaActivaAmbFitxers() {
   for (const temporada of TEMPORADES) {
     temporada.curses = await Promise.all(
       temporada.curses.map(cursa => {
